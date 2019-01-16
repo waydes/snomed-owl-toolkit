@@ -117,6 +117,7 @@ public class ApplicationTest {
 		runApplication(arguments.split(" "));
 
 		String out = outStream.toString();
+		System.out.println(out);
 		assertTrue(out.contains("concepts read from sct2_Concept_Snapshot_INT_20180731.txt"));
 		assertTrue(out.contains("concepts read from sct2_Concept_Snapshot_ExtensionA_20180931.txt"));
 		assertTrue(out.contains("OWL Ontology file written to - ontology-"));
