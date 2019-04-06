@@ -28,6 +28,7 @@ import org.snomed.otf.owltoolkit.ontology.render.SnomedFunctionalSyntaxDocumentF
 import org.snomed.otf.owltoolkit.ontology.render.SnomedFunctionalSyntaxStorerFactory;
 import org.snomed.otf.owltoolkit.ontology.render.SnomedPrefixManager;
 import org.snomed.otf.owltoolkit.service.ReasonerServiceRuntimeException;
+import org.snomed.otf.owltoolkit.taxonomy.Description;
 import org.snomed.otf.owltoolkit.taxonomy.SnomedTaxonomy;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
@@ -297,9 +298,10 @@ public class OntologyService {
 	}
 
 	private void addAnnotation(Long conceptId, SnomedTaxonomy snomedTaxonomy, Set<OWLAxiom> axioms) {
-		String conceptFsnTerm = snomedTaxonomy.getConceptTerm(conceptId);
-		if (conceptFsnTerm != null) {
-			axioms.add(factory.getOWLAnnotationAssertionAxiom(factory.getRDFSLabel(), IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId), factory.getOWLLiteral(conceptFsnTerm)));
+		Description description = snomedTaxonomy.getConceptTerm(conceptId);
+		if (description != null) {
+			axioms.add(factory.getOWLAnnotationAssertionAxiom(factory.getRDFSLabel(), IRI.create(SNOMED_CORE_COMPONENTS_URI + conceptId),
+					factory.getOWLLiteral(description.getTerm(), description.getLanguageCode())));
 		}
 	}
 

@@ -75,7 +75,7 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Object Property: <http://snomed.info/id/363698007> (Finding site (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"@en)\n" +
 						"SubObjectPropertyOf(:363698007 :762705008)\n" +
 						"\n" +
 						"\n" +
@@ -86,46 +86,46 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Class: <http://snomed.info/id/113331007> (Structure of endocrine system (body structure))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"@en)\n" +
 						"SubClassOf(:113331007 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/116680003> (Is a (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"@en)\n" +
 						"SubClassOf(:116680003 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/138875005> (SNOMED CT Concept (SNOMED RT+CTV3))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"@en)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/362969004> (Disorder of endocrine system (disorder))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"@en)\n" +
 						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/404684003> (Clinical finding (finding))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"@en)\n" +
 						"SubClassOf(:404684003 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/410662002> (Concept model attribute (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"@en)\n" +
 						"SubClassOf(:410662002 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723594008> (All precoordinated SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723594008 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723596005> (All SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723596005 :723594008)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/900000000000441003> (SNOMED CT Model Component (metadata))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"@en)\n" +
 						"SubClassOf(:900000000000441003 :138875005)\n" +
 						"\n" +
 						"\n" +
@@ -185,7 +185,7 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Object Property: <http://snomed.info/id/363698007> (Finding site (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"@en)\n" +
 						"SubObjectPropertyOf(:363698007 :762705008)\n" +
 						"\n" +
 						"\n" +
@@ -205,46 +205,46 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Class: <http://snomed.info/id/113331007> (Structure of endocrine system (body structure))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"@en)\n" +
 						"SubClassOf(:113331007 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/116680003> (Is a (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"@en)\n" +
 						"SubClassOf(:116680003 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/138875005> (SNOMED CT Concept (SNOMED RT+CTV3))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"@en)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/362969004> (Disorder of endocrine system (disorder))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"@en)\n" +
 						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/404684003> (Clinical finding (finding))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"@en)\n" +
 						"SubClassOf(:404684003 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/410662002> (Concept model attribute (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"@en)\n" +
 						"SubClassOf(:410662002 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723594008> (All precoordinated SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723594008 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723596005> (All SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723596005 :723594008)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/900000000000441003> (SNOMED CT Model Component (metadata))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"@en)\n" +
 						"SubClassOf(:900000000000441003 :138875005)\n" +
 						"\n" +
 						"\n" +
@@ -313,7 +313,7 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Object Property: <http://snomed.info/id/363698007> (Finding site (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"@en)\n" +
 						"SubObjectPropertyOf(:363698007 :762705008)\n" +
 						"\n" +
 						"\n" +
@@ -324,22 +324,22 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Class: <http://snomed.info/id/113331007> (Structure of endocrine system (body structure))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"@en)\n" +
 						"SubClassOf(:113331007 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/116680003> (Is a (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"@en)\n" +
 						"SubClassOf(:116680003 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/138875005> (SNOMED CT Concept (SNOMED RT+CTV3))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"@en)\n" +
 						"\n" +
 
 						"# Class: <http://snomed.info/id/18736003> (Middle ear exploration through ear canal incision (procedure))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :18736003 \"Middle ear exploration through ear canal incision (procedure)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :18736003 \"Middle ear exploration through ear canal incision (procedure)\"@en)\n" +
 						// Class with multiple parents and multiple role groups to test sorting
 						"SubClassOf(" +
 						":18736003 " +
@@ -380,32 +380,32 @@ public class RF2ToOWLServiceTest {
 
 						"# Class: <http://snomed.info/id/362969004> (Disorder of endocrine system (disorder))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"@en)\n" +
 						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/404684003> (Clinical finding (finding))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"@en)\n" +
 						"SubClassOf(:404684003 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/410662002> (Concept model attribute (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"@en)\n" +
 						"SubClassOf(:410662002 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723594008> (All precoordinated SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723594008 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723596005> (All SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723596005 :723594008)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/900000000000441003> (SNOMED CT Model Component (metadata))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"@en)\n" +
 						"SubClassOf(:900000000000441003 :138875005)\n" +
 						"\n" +
 
@@ -484,7 +484,7 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Object Property: <http://snomed.info/id/363698007> (Finding site (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :363698007 \"Finding site (attribute)\"@en)\n" +
 						"SubObjectPropertyOf(:363698007 :762705008)\n" +
 						"\n" +
 						"\n" +
@@ -495,22 +495,22 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Class: <http://snomed.info/id/113331007> (Structure of endocrine system (body structure))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :113331007 \"Structure of endocrine system (body structure)\"@en)\n" +
 						"SubClassOf(:113331007 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/116680003> (Is a (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :116680003 \"Is a (attribute)\"@en)\n" +
 						"SubClassOf(:116680003 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/138875005> (SNOMED CT Concept (SNOMED RT+CTV3))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :138875005 \"SNOMED CT Concept (SNOMED RT+CTV3)\"@en)\n" +
 						"\n" +
 
 						"# Class: <http://snomed.info/id/18736003> (Middle ear exploration through ear canal incision (procedure))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :18736003 \"Middle ear exploration through ear canal incision (procedure)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :18736003 \"Middle ear exploration through ear canal incision (procedure)\"@en)\n" +
 						// Class with multiple parents and multiple role groups to test sorting
 						"SubClassOf(" +
 						":18736003 " +
@@ -551,32 +551,32 @@ public class RF2ToOWLServiceTest {
 
 						"# Class: <http://snomed.info/id/362969004> (Disorder of endocrine system)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system\"@en)\n" +
 						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/404684003> (Clinical finding)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding\"@en)\n" +
 						"SubClassOf(:404684003 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/410662002> (Concept model attribute (attribute))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :410662002 \"Concept model attribute (attribute)\"@en)\n" +
 						"SubClassOf(:410662002 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723594008> (All precoordinated SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723594008 \"All precoordinated SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723594008 :900000000000441003)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/723596005> (All SNOMED CT content (foundation metadata concept))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :723596005 \"All SNOMED CT content (foundation metadata concept)\"@en)\n" +
 						"SubClassOf(:723596005 :723594008)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/900000000000441003> (SNOMED CT Model Component (metadata))\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :900000000000441003 \"SNOMED CT Model Component (metadata)\"@en)\n" +
 						"SubClassOf(:900000000000441003 :138875005)\n" +
 						"\n" +
 
@@ -642,7 +642,7 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Object Property: <http://snomed.info/id/363698007> (sitio del hallazgo)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :363698007 \"sitio del hallazgo\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :363698007 \"sitio del hallazgo\"@es)\n" +
 						"SubObjectPropertyOf(:363698007 :762705008)\n" +
 						"\n" +
 						"\n" +
@@ -653,7 +653,7 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Class: <http://snomed.info/id/113331007> (estructura del sistema endocrino)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :113331007 \"estructura del sistema endocrino\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :113331007 \"estructura del sistema endocrino\"@es)\n" +
 						"SubClassOf(:113331007 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/116680003> (<http://snomed.info/id/116680003>)\n" +
@@ -662,11 +662,11 @@ public class RF2ToOWLServiceTest {
 						"\n" +
 						"# Class: <http://snomed.info/id/138875005> (concepto de SNOMED CT)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :138875005 \"concepto de SNOMED CT\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :138875005 \"concepto de SNOMED CT\"@es)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/362969004> (trastorno del sistema endocrino)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :362969004 \"trastorno del sistema endocrino\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"trastorno del sistema endocrino\"@es)\n" +
 						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/404684003> (<http://snomed.info/id/404684003>)\n" +

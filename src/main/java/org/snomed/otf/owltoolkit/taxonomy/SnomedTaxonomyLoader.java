@@ -219,7 +219,7 @@ public class SnomedTaxonomyLoader extends ImpotentComponentFactory {
 			if ((descriptionType == DescriptionType.FSN && typeId.equals(FSN)) ||
 					descriptionType == DescriptionType.PT) {
 
-				snomedTaxonomy.addDescription(new Description(parseLong(id), parseLong(conceptId), term));
+				snomedTaxonomy.addDescription(new Description(parseLong(id), parseLong(conceptId), term, languageCode));
 			}
 		}
 		ComponentFactory componentFactoryTap = getComponentFactoryTap();

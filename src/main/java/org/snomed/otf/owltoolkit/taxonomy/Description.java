@@ -6,13 +6,15 @@ public class Description {
 
 	private final long id;
 	private final String term;
+	private final String languageCode;
 	private final long conceptId;
 	private boolean preferred;
 
-	public Description(long id, long conceptId, String term) {
+	public Description(long id, long conceptId, String term, String languageCode) {
 		this.id = id;
 		this.conceptId = conceptId;
 		this.term = term;
+		this.languageCode = languageCode;
 	}
 
 	public void markPreferred() {
@@ -33,6 +35,10 @@ public class Description {
 
 	public boolean isPreferred() {
 		return preferred;
+	}
+
+	public String getLanguageCode() {
+		return languageCode;
 	}
 
 	@Override

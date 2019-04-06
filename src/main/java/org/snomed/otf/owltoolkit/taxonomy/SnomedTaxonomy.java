@@ -251,12 +251,12 @@ public class SnomedTaxonomy {
 		}
 	}
 
-	public String getConceptTerm(Long conceptId) {
+	public Description getConceptTerm(Long conceptId) {
 		Set<Description> descriptions = conceptDescriptionsMap.get(conceptId);
 		if (descriptions != null) {
 			for (Description description : descriptions) {
 				if (description.isPreferred()) {
-					return description.getTerm();
+					return description;
 				}
 			}
 		}
