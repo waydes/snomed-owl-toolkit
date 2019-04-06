@@ -15,6 +15,8 @@ import static org.junit.Assert.assertEquals;
 
 public class RF2ToOWLServiceTest {
 
+	private static final String SPANISH_LANGUAGE_REFSET = "450828004";
+
 	@Test
 	public void convertRF2ArchiveToOWL() throws Exception {
 		final RF2ToOWLService rf2ToOWLService = new RF2ToOWLService();
@@ -419,17 +421,22 @@ public class RF2ToOWLServiceTest {
 	}
 
 	@Test
-	public void convertExtensionRF2ArchivesWithSomeTranslatedConceptsToOWL() throws Exception {
+	public void convertExtensionRF2ArchivesToOWLWithUS_PTs() throws Exception {
+
+		// PTs are included where available, otherwise the FSN is used.
+
 		final RF2ToOWLService rf2ToOWLService = new RF2ToOWLService();
 
 		File baseRF2SnapshotZip = ZipUtil.zipDirectoryRemovingCommentsAndBlankLines("src/test/resources/SnomedCT_MiniRF2_Base_snapshot");
 		File extensionRF2SnapshotZip = ZipUtil.zipDirectoryRemovingCommentsAndBlankLines("src/test/resources/SnomedCT_MiniRF2_Extension_snapshot");
 
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		rf2ToOWLService.convertRF2ArchiveToOWL(null, "20180731", DescriptionType.FSN, Concepts.US_LANGUAGE_REFERENCE_SET,
+		rf2ToOWLService.convertRF2ArchiveToOWL(null, "20180731", DescriptionType.PT, Concepts.US_LANGUAGE_REFERENCE_SET,
 				new InputStreamSet(baseRF2SnapshotZip, extensionRF2SnapshotZip), new OptionalFileInputStream(null), byteArrayOutputStream);
 
 		assertEquals("" +
+						rf2ToOWLService.getCopyrightNotice() +
+						"\n" +
 						"Prefix(test:=<http://test.com/test/>)\n" +
 						"Prefix(:=<http://snomed.info/id/>)\n" +
 						"Prefix(owl:=<http://www.w3.org/2002/07/owl#>)\n" +
@@ -542,14 +549,14 @@ public class RF2ToOWLServiceTest {
 						":25342003)))))\n" +
 						"\n" +
 
-						"# Class: <http://snomed.info/id/362969004> (Disorder of endocrine system (disorder))\n" +
+						"# Class: <http://snomed.info/id/362969004> (Disorder of endocrine system)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system (disorder)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"Disorder of endocrine system\"^^xsd:string)\n" +
 						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
 						"\n" +
-						"# Class: <http://snomed.info/id/404684003> (Clinical finding (finding))\n" +
+						"# Class: <http://snomed.info/id/404684003> (Clinical finding)\n" +
 						"\n" +
-						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding (finding)\"^^xsd:string)\n" +
+						"AnnotationAssertion(rdfs:label :404684003 \"Clinical finding\"^^xsd:string)\n" +
 						"SubClassOf(:404684003 :138875005)\n" +
 						"\n" +
 						"# Class: <http://snomed.info/id/410662002> (Concept model attribute (attribute))\n" +
@@ -578,6 +585,113 @@ public class RF2ToOWLServiceTest {
 						"# Class: <http://snomed.info/id/900101001> (<http://snomed.info/id/900101001>)\n" +
 						"\n" +
 						"SubClassOf(:900101001 :900000000000441003)\n" +
+						"\n" +
+						"\n" +
+						")",
+				byteArrayOutputStream.toString());
+	}
+
+	@Test
+	public void convertExtensionRF2ArchivesToOWLWithSpanishPTs() throws Exception {
+
+		// PTs are included where available, otherwise the FSN is used.
+
+		final RF2ToOWLService rf2ToOWLService = new RF2ToOWLService();
+
+		File baseRF2SnapshotZip = ZipUtil.zipDirectoryRemovingCommentsAndBlankLines("src/test/resources/SnomedCT_MiniRF2_Base_snapshot");
+		File extensionRF2SnapshotZip = ZipUtil.zipDirectoryRemovingCommentsAndBlankLines("src/test/resources/SnomedCT_MiniRF2_ExtensionES_snapshot");
+
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		rf2ToOWLService.convertRF2ArchiveToOWL(null, "20180731", DescriptionType.PT, SPANISH_LANGUAGE_REFSET,
+				new InputStreamSet(baseRF2SnapshotZip, extensionRF2SnapshotZip), new OptionalFileInputStream(null), byteArrayOutputStream);
+
+		assertEquals("" +
+						rf2ToOWLService.getCopyrightNotice() +
+						"\n" +
+						"Prefix(test:=<http://test.com/test/>)\n" +
+						"Prefix(:=<http://snomed.info/id/>)\n" +
+						"Prefix(owl:=<http://www.w3.org/2002/07/owl#>)\n" +
+						"Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)\n" +
+						"Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)\n" +
+						"Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)\n" +
+						"Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)\n" +
+						"\n" +
+						"\n" +
+
+						// Extension Ontology header
+						"Ontology(<http://snomed.info/sct/900000000000207008>\n" +
+						"<http://snomed.info/sct/900000000000207008/version/20180731>\n" +
+						"\n" +
+						"Declaration(Class(:113331007))\n" +
+						"Declaration(Class(:116680003))\n" +
+						"Declaration(Class(:138875005))\n" +
+						"Declaration(Class(:362969004))\n" +
+						"Declaration(Class(:404684003))\n" +
+						"Declaration(Class(:410662002))\n" +
+						"Declaration(Class(:450829007))\n" +
+						"Declaration(Class(:723594008))\n" +
+						"Declaration(Class(:723596005))\n" +
+						"Declaration(Class(:900000000000441003))\n" +
+						"Declaration(ObjectProperty(:363698007))\n" +
+						"Declaration(ObjectProperty(:609096000))\n" +
+						"Declaration(ObjectProperty(:762705008))\n" +
+						"\n" +
+						"############################\n" +
+						"#   Object Properties\n" +
+						"############################\n" +
+						"\n" +
+						"# Object Property: <http://snomed.info/id/363698007> (sitio del hallazgo)\n" +
+						"\n" +
+						"AnnotationAssertion(rdfs:label :363698007 \"sitio del hallazgo\"^^xsd:string)\n" +
+						"SubObjectPropertyOf(:363698007 :762705008)\n" +
+						"\n" +
+						"\n" +
+						"\n" +
+						"############################\n" +
+						"#   Classes\n" +
+						"############################\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/113331007> (estructura del sistema endocrino)\n" +
+						"\n" +
+						"AnnotationAssertion(rdfs:label :113331007 \"estructura del sistema endocrino\"^^xsd:string)\n" +
+						"SubClassOf(:113331007 :138875005)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/116680003> (<http://snomed.info/id/116680003>)\n" +
+						"\n" +
+						"SubClassOf(:116680003 :900000000000441003)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/138875005> (concepto de SNOMED CT)\n" +
+						"\n" +
+						"AnnotationAssertion(rdfs:label :138875005 \"concepto de SNOMED CT\"^^xsd:string)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/362969004> (trastorno del sistema endocrino)\n" +
+						"\n" +
+						"AnnotationAssertion(rdfs:label :362969004 \"trastorno del sistema endocrino\"^^xsd:string)\n" +
+						"EquivalentClasses(:362969004 ObjectIntersectionOf(:404684003 ObjectSomeValuesFrom(:609096000 ObjectSomeValuesFrom(:363698007 :113331007))))\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/404684003> (<http://snomed.info/id/404684003>)\n" +
+						"\n" +
+						"SubClassOf(:404684003 :138875005)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/410662002> (<http://snomed.info/id/410662002>)\n" +
+						"\n" +
+						"SubClassOf(:410662002 :900000000000441003)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/450829007> (<http://snomed.info/id/450829007>)\n" +
+						"\n" +
+						"SubClassOf(:450829007 :900000000000441003)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/723594008> (<http://snomed.info/id/723594008>)\n" +
+						"\n" +
+						"SubClassOf(:723594008 :900000000000441003)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/723596005> (<http://snomed.info/id/723596005>)\n" +
+						"\n" +
+						"SubClassOf(:723596005 :723594008)\n" +
+						"\n" +
+						"# Class: <http://snomed.info/id/900000000000441003> (<http://snomed.info/id/900000000000441003>)\n" +
+						"\n" +
+						"SubClassOf(:900000000000441003 :138875005)\n" +
 						"\n" +
 						"\n" +
 						")",
