@@ -83,6 +83,7 @@ public class StatedRelationshipToOwlRefsetService {
 
 		// Fetch attributes which are not grouped within the MRCM Attribute Domain International reference set.
 		Set<Long> neverGroupedRoles = snomedTaxonomy.getUngroupedRolesForContentTypeOrDefault(parseLong(Concepts.ALL_PRECOORDINATED_CONTENT));
+		Map<Long, Integer> conceptModelMaxEffectiveTime = snomedTaxonomy.getConceptModelMaxEffectiveTime();
 
 		OntologyService ontologyService = new OntologyService(neverGroupedRoles);
 		OWLOntology ontology = ontologyService.createOntology(snomedTaxonomy);
@@ -111,6 +112,8 @@ public class StatedRelationshipToOwlRefsetService {
 					writer.write(TAB);
 
 					// Blank effectiveTime
+					Integer effectiveTime = conceptModelMaxEffectiveTime.get(conceptId);
+					writer.write(effectiveTime != null ? effectiveTime.toString() : "");
 					writer.write(TAB);
 
 					// Active

@@ -67,8 +67,11 @@ public class SnomedTaxonomyLoader extends ImpotentComponentFactory {
 
 	@Override
 	public void newConceptState(String conceptId, String effectiveTime, String active, String moduleId, String definitionStatusId) {
+		long id = parseLong(conceptId);
+		if (!Strings.isNullOrEmpty(effectiveTime)) {
+			snomedTaxonomy.putConceptModelEffectiveTime(id, Integer.parseInt(effectiveTime));
+		}
 		if (ACTIVE.equals(active)) {
-			long id = parseLong(conceptId);
 			snomedTaxonomy.getAllConceptIds().add(id);
 			if (Concepts.FULLY_DEFINED.equals(definitionStatusId)) {
 				snomedTaxonomy.getFullyDefinedConceptIds().add(id);
@@ -80,7 +83,6 @@ public class SnomedTaxonomyLoader extends ImpotentComponentFactory {
 				snomedTaxonomy.getInactivatedConcepts().remove(id);
 			}
 		} else {
-			long id = parseLong(conceptId);
 			// This will take inactive concepts from both snapshot and delta
 			snomedTaxonomy.getInactivatedConcepts().add(id);
 			if (loadingDelta) {
@@ -98,6 +100,10 @@ public class SnomedTaxonomyLoader extends ImpotentComponentFactory {
 	@Override
 	public void newRelationshipState(String id, String effectiveTime, String active, String moduleId, String sourceId, String destinationId, String relationshipGroup, String typeId, String characteristicTypeId, String modifierId) {
 		boolean stated = STATED_RELATIONSHIP.equals(characteristicTypeId);
+
+		if (stated && !Strings.isNullOrEmpty(effectiveTime)) {
+			snomedTaxonomy.putConceptModelEffectiveTime(parseLong(sourceId), Integer.parseInt(effectiveTime));
+		}
 
 		if (ACTIVE.equals(active) && !ADDITIONAL_RELATIONSHIP.equals(characteristicTypeId)) {// Ignore additional relationships
 

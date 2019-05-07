@@ -36,15 +36,16 @@ public class SnomedTaxonomy {
 	private Map<String, String> ontologyHeader = new HashMap<>();
 	private Set<Long> allConceptIds = new LongOpenHashSet();
 	private Set<Long> fullyDefinedConceptIds = new LongOpenHashSet();
-	private Map<Long, Relationship> statedRelationshipsById = new HashMap<>();
-	private Map<Long, Relationship> inferredRelationshipsById = new HashMap<>();
+	private Map<Long, Relationship> statedRelationshipsById = new Long2ObjectOpenHashMap<>();
+	private Map<Long, Integer> conceptModelMaxEffectiveTime = new Long2ObjectOpenHashMap<>();
+	private Map<Long, Relationship> inferredRelationshipsById = new Long2ObjectOpenHashMap<>();
 	private Map<String, OWLAxiom> axiomsById = new HashMap<>();
 	private Map<Long, Set<Relationship>> conceptStatedRelationshipMap = new Long2ObjectOpenHashMap<>();
 	private Map<Long, Set<Relationship>> conceptInferredRelationshipMap = new Long2ObjectOpenHashMap<>();
 	private Map<Long, Set<Relationship>> conceptInactiveInferredRelationshipMap = new Long2ObjectOpenHashMap<>();
 	private Map<Long, Set<OWLAxiom>> conceptAxiomMap = new Long2ObjectOpenHashMap<>();
 	private Map<Long, Set<Long>> statedSubTypesMap = new Long2ObjectOpenHashMap<>();
-	private Map<Long, Set<Long>> ungroupedRolesByContentType = new HashMap<>();
+	private Map<Long, Set<Long>> ungroupedRolesByContentType = new Long2ObjectOpenHashMap<>();
 	private Set<Long> inactivatedConcepts = new LongOpenHashSet();
 	private Map<Long, String> conceptFsnTermMap = new Long2ObjectOpenHashMap<>();
 
@@ -294,5 +295,16 @@ public class SnomedTaxonomy {
 		AtomicLong axiomCount = new AtomicLong();
 		conceptAxiomMap.values().forEach(axioms -> axiomCount.addAndGet(axioms.size()));
 		return axiomCount.get();
+	}
+
+	public void putConceptModelEffectiveTime(long conceptId, int effectiveTime) {
+		Integer currentEffectiveTime = conceptModelMaxEffectiveTime.get(conceptId);
+		if (currentEffectiveTime == null || currentEffectiveTime < effectiveTime) {
+			conceptModelMaxEffectiveTime.put(conceptId, effectiveTime);
+		}
+	}
+
+	public Map<Long, Integer> getConceptModelMaxEffectiveTime() {
+		return conceptModelMaxEffectiveTime;
 	}
 }
