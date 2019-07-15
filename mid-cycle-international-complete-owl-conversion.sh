@@ -94,11 +94,11 @@ unzip $delta '**/Delta/*' -d work
 cd work
 unzip ../$conversionDelta
 echo "- Replacing Stated Relationship delta with empty data"
-head -n1 */Delta/Terminology/sct2_StatedRelationship_Delta* > stated_tmp.txt
-cat stated_tmp.txt > */Delta/Terminology/sct2_StatedRelationship_Delta*
+head -n1 */Delta/Terminology/*sct2_StatedRelationship_Delta* > stated_tmp.txt
+cat stated_tmp.txt > */Delta/Terminology/*sct2_StatedRelationship_Delta*
 rm stated_tmp.txt
 echo "- Replacing OWL delta"
-cat sct2_sRefset_OWL* > */Delta/Terminology/sct2_sRefset_OWL*
+cat sct2_sRefset_OWL* > */Delta/Terminology/*sct2_sRefset_OWL*
 echo "- Creating zip"
 completeOWL=SnomedCT_CompleteOWLDelta.zip
 zip -r $completeOWL S*

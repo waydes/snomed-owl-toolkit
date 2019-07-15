@@ -2,6 +2,7 @@ package org.snomed.otf.owltoolkit;
 
 import com.google.common.collect.Lists;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.snomed.otf.owltoolkit.conversion.AdditionalExtensionStatedRelationshipToOwlRefsetService;
 import org.snomed.otf.owltoolkit.conversion.ConversionException;
 import org.snomed.otf.owltoolkit.conversion.RF2ToOWLService;
 import org.snomed.otf.owltoolkit.conversion.StatedRelationshipToOwlRefsetService;
@@ -39,6 +40,7 @@ public class Application {
 	private static final String ARG_RF2_SNAPSHOT_ARCHIVES = "-rf2-snapshot-archives";
 	private static final String ARG_RF2_AUTHORING_DELTA_ARCHIVE = "-rf2-authoring-delta-archive";
 	private static final String ARG_RF2_STATED_TO_COMPLETE_OWL_RECONCILE = "-rf2-stated-to-complete-owl-reconcile";
+	private static final String ARG_ADDITIONAL_AXIOMS	 = "-additional";
 	private static final String ARG_URI = "-uri";
 	private static final String ARG_VERSION = "-version";
 	private static final String ARG_WITHOUT_ANNOTATIONS = "-without-annotations";
@@ -79,7 +81,7 @@ public class Application {
 			} else if (args.contains(ARG_RF2_STATED_TO_COMPLETE_OWL_RECONCILE)) {
 				modeFound = true;
 				convertStatedRelationshipsToOwlReferenceSetAndReconcile(args);
-			}
+			} 
 			if (!modeFound || args.contains(ARG_RF2_TO_OWL)) {
 				rf2ToOwl(args);
 			}
@@ -170,11 +172,19 @@ public class Application {
 				);
 			} else {
 				try ( FileInputStream extensionSnapshotStream = new FileInputStream(iterator.next())) {
-					File statFile = service.convertExtensionStatedRelationshipsToOwlRefsetAndInactiveRelationshipsArchive(new InputStreamSet(snapshotStream, extensionSnapshotStream), 
-							deltaStream,
-							archiveOutputStream,
-							effectiveDate);
-					System.out.println("Extension stated relationships are not converted into axioms are written to " + statFile.getAbsolutePath());
+					if (args.contains(ARG_ADDITIONAL_AXIOMS)) {
+						new AdditionalExtensionStatedRelationshipToOwlRefsetService().convertExtensionStatedRelationshipsToAdditionalAxioms(new InputStreamSet(snapshotStream, extensionSnapshotStream),
+								deltaStream, 
+								archiveOutputStream, 
+								effectiveDate);
+					} else {
+						File statedNotConvertedFile = service.convertExtensionStatedRelationshipsToOwlRefsetAndInactiveRelationshipsArchive(new InputStreamSet(snapshotStream, extensionSnapshotStream), 
+								deltaStream,
+								archiveOutputStream,
+								effectiveDate);
+						System.out.println("Extension stated relationships are not converted into axioms are written to " + statedNotConvertedFile.getAbsolutePath());
+					}
+					
 				}
 			}
 			System.out.println("Delta archive successfully written to " + outputFilePath);

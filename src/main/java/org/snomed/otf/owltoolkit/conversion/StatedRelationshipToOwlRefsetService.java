@@ -31,13 +31,13 @@ import java.util.zip.ZipOutputStream;
 import static java.lang.Long.parseLong;
 
 /**
- * Used to convert stated relationships within the international edition to a complete OWL Axiom reference set.
+ * Used to convert stated relationships within the international edition or an extension to a complete OWL Axiom reference set.
  */
 public class StatedRelationshipToOwlRefsetService {
 
-	private static final String TXT = ".txt";
-	private static final String SCT2_STATED_RELATIONSHIP_DELTA = "sct2_StatedRelationship_Delta_INT_";
-	private static final String OWL_AXIOM_REFSET_DELTA = "sct2_sRefset_OWLAxiomDelta_INT_";
+	public static final String TXT = ".txt";
+	public static final String SCT2_STATED_RELATIONSHIP_DELTA = "sct2_StatedRelationship_Delta_INT_";
+	public static final String OWL_AXIOM_REFSET_DELTA = "sct2_sRefset_OWLAxiomDelta_INT_";
 	private Supplier<String> identifierSupplier = () -> UUID.randomUUID().toString();
 	private static final String TAB = "\t";
 	private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -287,7 +287,7 @@ public class StatedRelationshipToOwlRefsetService {
 	}
 
 	
-	void convertStatedRelationshipsToOwlRefsetForExtension(SnomedTaxonomy snomedTaxonomy,  Set<Long> conceptIds, OutputStream outputStream, String moduleId) throws OWLOntologyCreationException, ConversionException {
+	void convertStatedRelationshipsToOwlRefsetForExtension(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds, OutputStream outputStream, String moduleId) throws OWLOntologyCreationException, ConversionException {
 
 		// Fetch attributes which are not grouped within the MRCM Attribute Domain International reference set.
 		Set<Long> neverGroupedRoles = snomedTaxonomy.getUngroupedRolesForContentTypeOrDefault(parseLong(Concepts.ALL_PRECOORDINATED_CONTENT));
@@ -312,7 +312,7 @@ public class StatedRelationshipToOwlRefsetService {
 		convertAxiomsToReferenceSet(null, axiomsFromStatedRelationships, null, ontologyService, ontology, outputStream, snomedTaxonomy, null);
 	}
 	
-	private static void writeStateRelationshipRow(BufferedWriter writer, String id, String active, String moduleId,
+	static void writeStateRelationshipRow(BufferedWriter writer, String id, String active, String moduleId,
 			String sourceId, String destinationId, String relationshipGroup,
 			String typeId) throws IOException {
 		writer.write(id);
