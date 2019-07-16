@@ -39,7 +39,7 @@ public class StatedRelationshipToOwlRefsetService {
 	public static final String SCT2_STATED_RELATIONSHIP_DELTA = "sct2_StatedRelationship_Delta_INT_";
 	public static final String OWL_AXIOM_REFSET_DELTA = "sct2_sRefset_OWLAxiomDelta_INT_";
 	private Supplier<String> identifierSupplier = () -> UUID.randomUUID().toString();
-	private static final String TAB = "\t";
+	public static final String TAB = "\t";
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	public File convertExtensionStatedRelationshipsToOwlRefsetAndInactiveRelationshipsArchive(InputStreamSet snapshotInputStreamSet,
@@ -286,8 +286,11 @@ public class StatedRelationshipToOwlRefsetService {
 		}
 	}
 
-	
 	void convertStatedRelationshipsToOwlRefsetForExtension(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds, OutputStream outputStream, String moduleId) throws OWLOntologyCreationException, ConversionException {
+		convertStatedRelationshipsToOwlRefsetForExtension(snomedTaxonomy, conceptIds, outputStream, moduleId, false);
+	}
+	
+	void convertStatedRelationshipsToOwlRefsetForExtension(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds, OutputStream outputStream, String moduleId, boolean primitiveAxiom) throws OWLOntologyCreationException, ConversionException {
 
 		// Fetch attributes which are not grouped within the MRCM Attribute Domain International reference set.
 		Set<Long> neverGroupedRoles = snomedTaxonomy.getUngroupedRolesForContentTypeOrDefault(parseLong(Concepts.ALL_PRECOORDINATED_CONTENT));
@@ -295,7 +298,7 @@ public class StatedRelationshipToOwlRefsetService {
 		OntologyService ontologyService = new OntologyService(neverGroupedRoles);
 		OWLOntology ontology = ontologyService.createOntology(snomedTaxonomy);
 		
-		Map<Long, Set<OWLAxiom>> axiomsFromStatedRelationships = ontologyService.createAxiomsFromStatedRelationships(snomedTaxonomy, conceptIds);
+		Map<Long, Set<OWLAxiom>> axiomsFromStatedRelationships = ontologyService.createAxiomsFromStatedRelationships(snomedTaxonomy, conceptIds, primitiveAxiom);
 		
 		convertAxiomsToReferenceSet(null, axiomsFromStatedRelationships, null, ontologyService, ontology, outputStream, snomedTaxonomy, moduleId);
 	}

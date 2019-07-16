@@ -41,6 +41,7 @@ public class Application {
 	private static final String ARG_RF2_AUTHORING_DELTA_ARCHIVE = "-rf2-authoring-delta-archive";
 	private static final String ARG_RF2_STATED_TO_COMPLETE_OWL_RECONCILE = "-rf2-stated-to-complete-owl-reconcile";
 	private static final String ARG_ADDITIONAL_AXIOMS	 = "-additional";
+	private static final String ARG_ANALYZE = "-analyze";
 	private static final String ARG_URI = "-uri";
 	private static final String ARG_VERSION = "-version";
 	private static final String ARG_WITHOUT_ANNOTATIONS = "-without-annotations";
@@ -172,9 +173,12 @@ public class Application {
 				);
 			} else {
 				try ( FileInputStream extensionSnapshotStream = new FileInputStream(iterator.next())) {
-					if (args.contains(ARG_ADDITIONAL_AXIOMS)) {
+					if (args.contains(ARG_ANALYZE) ) {
+						new AdditionalExtensionStatedRelationshipToOwlRefsetService().checkAndReportExtensionOverridingInternational(new InputStreamSet(snapshotStream, extensionSnapshotStream),
+								archiveOutputStream,
+								effectiveDate);
+					} else if (args.contains(ARG_ADDITIONAL_AXIOMS)) {
 						new AdditionalExtensionStatedRelationshipToOwlRefsetService().convertExtensionStatedRelationshipsToAdditionalAxioms(new InputStreamSet(snapshotStream, extensionSnapshotStream),
-								deltaStream, 
 								archiveOutputStream, 
 								effectiveDate);
 					} else {
@@ -187,7 +191,9 @@ public class Application {
 					
 				}
 			}
-			System.out.println("Delta archive successfully written to " + outputFilePath);
+			if (!args.contains(ARG_ANALYZE)) {
+				System.out.println("Delta archive successfully written to " + outputFilePath);
+			}
 
 		} catch (ConversionException | OWLOntologyCreationException e) {
 			System.out.println("Failed to convert stated relationships to OWL Axioms");

@@ -1,6 +1,8 @@
 package org.snomed.otf.owltoolkit.conversion;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -19,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.snomed.otf.owltoolkit.constants.Concepts;
 import org.snomed.otf.owltoolkit.constants.RF2Headers;
+import org.snomed.otf.owltoolkit.domain.Relationship;
 import org.snomed.otf.owltoolkit.taxonomy.SnomedTaxonomy;
 import org.snomed.otf.owltoolkit.util.InputStreamSet;
 import org.snomed.otf.owltoolkit.util.OptionalFileInputStream;
@@ -35,109 +38,126 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
  * 4. Adding grouped attribute (non zero role group)
  * 
  * Replacing above with additional axioms:
- *  I. Create primitive additional axioms for Case 1 and 2 in the extension module
- *  II. Case 3 requires adding an Is_A + existing not grouped Is-A to create primitive additional axiom in the extension module only.
+ * 
+ *  I. Create primitive additional axioms for Case 1 and 2 in the extension module.
+ *  		Inputs: The International Complete OWL release snapshot files and Extension Snapshot export from the termServer 
+ *  
+ *  II. Case 3 requires adding an Is_A manually + existing not grouped Is-A to create primitive additional axiom in the extension module only.
+ *  		Inputs: Same as above after manually adding the appropriate Is-A and patching the Extension Snapshot files
+ *  
  *  III. Case 4 requires the international stated view to create additional axiom.
- *
+ *  		Inputs: The International stated build used for complete OWL conversion + Extension Snapshot export
+ *	
+ * Outputs: Inactivated stated relationships and OWL axioms reference set
+ * 
  * Note: Axioms must be primitive when created for I and II
+ * How to run:
+ * To generate report:
+ * -rf2-stated-to-complete-owl -rf2-snapshot-archives <INT complete owl>, <Extension snapshot export> -analyze
+ * 
+ * To create axioms:
+ * -rf2-stated-to-complete-owl -rf2-snapshot-archives <INT complete owl>, <Extension snapshot export> -additional
  *
  */
 public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends StatedRelationshipToOwlRefsetService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	public void checkAndReportExtensionOverridingInternational(InputStreamSet snapshotInputStreamSet, OutputStream rf2DeltaZipResults,
+			String effectiveDate) throws IOException, ConversionException {
+		
+		ExtensionOverridingInternationalProcessor processor = new ExtensionOverridingInternationalProcessor();
+		SnomedTaxonomy snomedTaxonomy = readSnomedTaxonomy(snapshotInputStreamSet, new OptionalFileInputStream(null), processor, null);
+		processor.complete();
+		logger.info("Total active stated relationships having international source and destination concepts:" + processor.getTotalSourceAndDestinationAreIntConcepts());
+		Set<Long> bothIntConcepts = processor.getBothConceptsAreInternational();
+		writeOutStatedRelationshipsToFile(snomedTaxonomy, bothIntConcepts, "StatedRelationshipsToBeConvertedUsingAdditionalAxioms.txt");
+		logger.info("See full list in StatedRelationshipsToBeConvertedUsingAdditionalAxioms.txt");
+		logger.info("Total active stated relationships having international source concept only:" + processor.getInternationalConceptsModifiedByExtension().size());
+		Set<Long> extensionDestinationConcepts = processor.getInternationalConceptsModifiedByExtension();
+		extensionDestinationConcepts.removeAll(processor.getBothConceptsAreInternational());
+		writeOutStatedRelationshipsToFile(snomedTaxonomy, extensionDestinationConcepts, "StatedRelationshipToBeConvertedUsingGCIs.txt");
+		logger.info("See full list in StatedRelationshipToBeConvertedUsingGCIs.txt");
+		
+		writeOutStatedRelationshipsToFile(snomedTaxonomy, processor.getConceptsToGenerateAxiomsWithoutIntModelling(), "StatedRelationshipsToAxiomsWithoutIntStatedView.txt");
+		logger.info("Total concepts to create axioms without Internatinal model:" + processor.getConceptsToGenerateAxiomsWithoutIntModelling().size());
+		logger.info("See full list in StatedRelationshipsToAxiomsWithoutIntStatedView.txt");
+		
+		writeOutStatedRelationshipsToFile(snomedTaxonomy, processor.getConceptsToGenerateAxiomsNeedToAddIsA(), "StatedRelationshipsToAxiomsToAddIsA.txt");
+		logger.info("Total concepts to create axioms with the need to add IS_A manually:" + processor.getConceptsToGenerateAxiomsNeedToAddIsA().size());
+		logger.info("See full list in StatedRelationshipsToAxiomsToAddIsA.txt");
+		
+		writeOutStatedRelationshipsToFile(snomedTaxonomy, processor.getConceptsToGenerateAxiomsWithIntModelling(), "StatedRelationshipsToAxiomsRequiringIntStatedView.txt");
+		logger.info("Total concepts to create axioms requiring International modelling:" + processor.getConceptsToGenerateAxiomsWithIntModelling().size());
+		logger.info("See full list in StatedRelationshipsToAxiomsRequiringIntStatedView.txt");
+	}
 
 	public void convertExtensionStatedRelationshipsToAdditionalAxioms(InputStreamSet snapshotInputStreamSet,
-			OptionalFileInputStream deltaStream,
 			OutputStream rf2DeltaZipResults,
 			String effectiveDate) throws ConversionException, OWLOntologyCreationException, IOException {
 		
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(rf2DeltaZipResults)) {
 			zipOutputStream.putNextEntry(new ZipEntry(SCT2_STATED_RELATIONSHIP_DELTA + effectiveDate + TXT));
-			ExtensionModifyingInternationalExtractor processor = new ExtensionModifyingInternationalExtractor(zipOutputStream);
-			SnomedTaxonomy snomedTaxonomy = readSnomedTaxonomy(snapshotInputStreamSet, deltaStream, processor, null);
+			ExtensionOverridingInternationalProcessor processor = new ExtensionOverridingInternationalProcessor(zipOutputStream);
+			SnomedTaxonomy snomedTaxonomy = readSnomedTaxonomy(snapshotInputStreamSet, null, processor, null);
 			processor.complete();
 			zipOutputStream.closeEntry();
-			logger.info("Total active stated relationships having international source and destination concepts:" + processor.getTotalSourceAndDestinationAreIntConcepts());
-			logger.info("Total active stated relationships having international source concept only:" + processor.getTotalActiveStatedRelationshipWithIntSource());
-			Set<Long> intConceptsModified = processor.getInternationalConceptsModifiedByExtension();
-			logger.info("Total active internationl source concepts only modifed by extension:" + intConceptsModified.size());
+			//uncomment code below to generate primitive axioms using International complete owl
+			Set<Long> conceptsToGenerate = processor.getConceptsToGenerateAxiomsWithoutIntModelling();
+//			Set<Long> conceptsToGenerate = processor.getConceptsToGenerateAxiomsNeedToAddIsA();
+			convertStatedRelationshipsToOwlRefsetForExtension(snomedTaxonomy, conceptsToGenerate, zipOutputStream, processor.getExtensionModuleId(), true);
 			
-			Set<Long> bothConcepts = processor.getConceptsHavingBoth();
-			logger.info("Total active internationl concepts modifed by extension:" + bothConcepts.size());
-			for (Long concept : bothConcepts) {
-				if (intConceptsModified.contains(concept)) {
-					System.out.println("Concept has matched two cases:" + concept);
-				}
-			}
-			boolean generateAxiomsWithoutInt = true;
-			Set<Long> conceptsOnlyAddedIsA = new HashSet<>(processor.getConceptsHavingIsARelationship());
-			conceptsOnlyAddedIsA.removeAll(processor.getConceptsHavingNonIsARelationship());
-			logger.info("Total concepts only added IS-A:" + conceptsOnlyAddedIsA.size());
-			Set<Long> conceptsHavingBoth = new HashSet<>(processor.getConceptsHavingIsARelationship());
-			conceptsHavingBoth.retainAll(processor.getConceptsHavingNonIsARelationship());
-			logger.info("Total concepts having an Is-A and non IS-A:" + conceptsHavingBoth.size());
-			Set<Long> requiringIntModel = new HashSet<>();
-			Set<Long> withoutIntModel = new HashSet<>();
-			for (Long concept : conceptsHavingBoth) {
-				boolean grouped = false;
-				for (String roleGroup : processor.getNonIsARelationshipGroupMap().get(concept)) {
-					if (!"0".equals(roleGroup)) {
-						grouped = true;
-						break;
-					}
-				}
-				if (grouped) {
-					requiringIntModel.add(concept);
-				} else {
-					withoutIntModel.add(concept);
-				}
-			}
-			Set<Long> conceptsHavingNonIsaOnly =  new HashSet<>(processor.getConceptsHavingNonIsARelationship());
-			conceptsHavingNonIsaOnly.removeAll(processor.getConceptsHavingIsARelationship());
-			logger.info("Total concepts having non IS-A only:" + conceptsHavingNonIsaOnly.size());
-			logger.info("Total concepts without the need of INT model:" + withoutIntModel.size());
-			Set<Long> toAddIsAOnly = new HashSet<>();
-			for (Long concept : conceptsHavingNonIsaOnly) {
-				boolean grouped = false;
-				for (String roleGroup : processor.getNonIsARelationshipGroupMap().get(concept)) {
-					if (!"0".equals(roleGroup)) {
-						grouped = true;
-						break;
-					}
-				}
-				if (!grouped) {
-					toAddIsAOnly.add(concept);
-				} else {
-					requiringIntModel.add(concept);
-				}
-			}
-			
-			logger.info("Total concepts requiring the international modelling " + requiringIntModel.size());
-			logger.info("Total concepts need to add IS_A only " + toAddIsAOnly);
-			zipOutputStream.putNextEntry(new ZipEntry(OWL_AXIOM_REFSET_DELTA + effectiveDate + TXT));
-			Set<Long> conceptsToGenerate = new HashSet<>();
-			if (generateAxiomsWithoutInt) {
-				conceptsToGenerate.addAll(withoutIntModel);
-				conceptsToGenerate.addAll(conceptsOnlyAddedIsA);
-				logger.info("Concepts without the need of INT model:" + conceptsToGenerate);
-			} else {
-				conceptsToGenerate.addAll(requiringIntModel);
-			}
-			//adding is a only
-			conceptsToGenerate = toAddIsAOnly;
-			convertStatedRelationshipsToOwlRefsetForExtension(snomedTaxonomy, conceptsToGenerate, zipOutputStream, processor.getExtensionModuleId());
+			//uncomment code below to generate concepts requiring INT stated view
+//			Set<Long> conceptsToGenerate = processor.getConceptsToGenerateAxiomsWithIntModelling();
+//			convertStatedRelationshipsToOwlRefsetForExtension(snomedTaxonomy, conceptsToGenerate, zipOutputStream, processor.getExtensionModuleId());
 			zipOutputStream.closeEntry();
 		}
 	}
 	
-	private static class ExtensionModifyingInternationalExtractor extends ImpotentComponentFactory {
+	
+	private void writeOutStatedRelationshipsToFile(SnomedTaxonomy snomedTaxonomy, Set<Long> concepts, String filename) throws IOException {
+		File bothConceptsReport = new File(filename);
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(bothConceptsReport))) {
+			writer.write(RF2Headers.RELATIONSHIP_HEADER);
+			for (Long conceptId : concepts) {
+				for (Relationship relationship : snomedTaxonomy.getStatedRelationships(conceptId)) {
+					writeOutRelationship(writer, relationship, conceptId);
+				}
+			}
+		}
+	}
+	
+	private void writeOutRelationship(BufferedWriter writer, Relationship relationship, Long conceptId) throws IOException {
+		writer.append(String.valueOf(relationship.getRelationshipId()));
+		writer.append(TAB);
+		writer.append(String.valueOf(relationship.getEffectiveTime()));
+		writer.append(TAB);
+		writer.append("1");
+		writer.append(TAB);
+		writer.append(String.valueOf(relationship.getModuleId()));
+		writer.append(TAB);
+		writer.append(String.valueOf(conceptId));
+		writer.append(TAB);
+		writer.append(String.valueOf(relationship.getDestinationId()));
+		writer.append(TAB);
+		writer.append(String.valueOf(relationship.getTypeId()));
+		writer.append(TAB);
+		writer.append(String.valueOf(relationship.getGroup()));
+		writer.append(TAB);
+		writer.append(String.valueOf(relationship.getCharacteristicTypeId()));
+		writer.append(TAB);
+		writer.append("900000000000451002");
+		writer.newLine();
+	}
+
+	
+	private static class ExtensionOverridingInternationalProcessor extends ImpotentComponentFactory {
 		
 		private static final String IS_A = "116680003";
 		private Set<Long> activeInternationalConcepts = new LongOpenHashSet();
 		private String extensionModuleId = null;
 		private Set<Long> sourceConcepts = new LongOpenHashSet();
 		private Set<Long> sourceAndDestinatinConcepts = new LongOpenHashSet();
-		private int totalActiveStatedRelationshipWithIntSource = 0;
 		private int totalSourceAndDestinationAreIntConcepts = 0;
 		private final BufferedWriter writer;
 		private final List<IOException> exceptionsThrown = new ArrayList<>();
@@ -145,7 +165,67 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 		private Set<Long> hasNonIsAConcepts = new LongOpenHashSet();
 		private Map<Long, Set<String>> nonIsaRelationGroupMap = new HashMap<Long, Set<String>>();
 		
-		public ExtensionModifyingInternationalExtractor(ZipOutputStream zipOutputStream) throws IOException {
+		Set<Long> requiringIntModel = new HashSet<>();
+		Set<Long> withoutIntModel = new HashSet<>();
+		Set<Long> toAddIsAOnly = new HashSet<>();
+		
+		public ExtensionOverridingInternationalProcessor() {
+			writer = null;
+		}
+		
+		public Set<Long> getConceptsToGenerateAxiomsWithIntModelling() {
+			return this.requiringIntModel;
+		}
+
+		public Set<Long> getConceptsToGenerateAxiomsNeedToAddIsA() {
+			return this.toAddIsAOnly;
+		}
+
+		public Set<Long> getConceptsToGenerateAxiomsWithoutIntModelling() {
+			return this.withoutIntModel;
+		}
+		
+		public void analyze() {
+			Set<Long> conceptsOnlyAddedIsA = new HashSet<>(getConceptsHavingIsARelationship());
+			conceptsOnlyAddedIsA.removeAll(getConceptsHavingNonIsARelationship());
+			withoutIntModel.addAll(conceptsOnlyAddedIsA);
+			
+			Set<Long> conceptsHavingBoth = new HashSet<>(getConceptsHavingIsARelationship());
+			conceptsHavingBoth.retainAll(getConceptsHavingNonIsARelationship());
+			
+			for (Long concept : conceptsHavingBoth) {
+				boolean grouped = isGrouped(concept);
+				if (grouped) {
+					requiringIntModel.add(concept);
+				} else {
+					withoutIntModel.add(concept);
+				}
+			}
+			Set<Long> conceptsHavingNonIsaOnly =  new HashSet<>(getConceptsHavingNonIsARelationship());
+			conceptsHavingNonIsaOnly.removeAll(getConceptsHavingIsARelationship());
+			
+			for (Long concept : conceptsHavingNonIsaOnly) {
+				boolean grouped = isGrouped(concept);
+				if (!grouped) {
+					toAddIsAOnly.add(concept);
+				} else {
+					requiringIntModel.add(concept);
+				}
+			}
+		}
+
+		private boolean isGrouped(Long concept) {
+			boolean grouped = false;
+			for (String roleGroup : getNonIsARelationshipGroupMap().get(concept)) {
+				if (!"0".equals(roleGroup)) {
+					grouped = true;
+					break;
+				}
+			}
+			return grouped;
+		}
+
+		public ExtensionOverridingInternationalProcessor(ZipOutputStream zipOutputStream) throws IOException {
 			writer = new BufferedWriter(new OutputStreamWriter(zipOutputStream));
 			writer.write(RF2Headers.RELATIONSHIP_HEADER);
 			writer.newLine();
@@ -179,14 +259,15 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 								nonIsaRelationGroupMap.computeIfAbsent(Long.valueOf(sourceId), k -> new HashSet<String>()).add(relationshipGroup);
 							}
 							try {
-								writeStateRelationshipRow(writer, id, "0", moduleId, sourceId, destinationId, relationshipGroup, typeId);
+								if (writer != null) {
+									writeStateRelationshipRow(writer, id, "0", moduleId, sourceId, destinationId, relationshipGroup, typeId);
+								}
 							} catch (IOException e) {
 								exceptionsThrown.add(e);
 							}
 							
 						} else {
 							sourceConcepts.add(Long.valueOf(sourceId));
-							totalActiveStatedRelationshipWithIntSource++;
 						}
 					}
 				}
@@ -194,10 +275,13 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 		}
 		
 		public void complete() throws IOException {
-			writer.flush();
+			if (writer != null) {
+				writer.flush();
+			}
 			if (!exceptionsThrown.isEmpty()) {
 				throw exceptionsThrown.get(0);
 			}
+			analyze();
 		}
 		
 		public Set<Long> getInternationalConceptsModifiedByExtension() {
@@ -208,15 +292,11 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 			return this.extensionModuleId;
 		}
 		
-		public int getTotalActiveStatedRelationshipWithIntSource() {
-			return this.totalActiveStatedRelationshipWithIntSource;
-		}
-		
 		public int getTotalSourceAndDestinationAreIntConcepts() {
 			return this.totalSourceAndDestinationAreIntConcepts;
 		}
 		
-		public Set<Long> getConceptsHavingBoth() {
+		public Set<Long> getBothConceptsAreInternational() {
 			return this.sourceAndDestinatinConcepts;
 		}
 		

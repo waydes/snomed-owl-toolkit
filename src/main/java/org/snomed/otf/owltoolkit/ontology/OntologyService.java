@@ -101,9 +101,9 @@ public class OntologyService {
 		return ontology;
 	}
 	
-	public Map<Long, Set<OWLAxiom>> createAxiomsFromStatedRelationships(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds) {
+	
+	public Map<Long, Set<OWLAxiom>> createAxiomsFromStatedRelationships(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds, boolean primitiveAxiom) {
 		Map<Long, Set<OWLAxiom>> axiomsMap = new Long2ObjectOpenHashMap<>();
-
 		// Create axioms of concept model attributes
 		// The Concept Model Object Attribute concept did not always exist - use the parent if it doesn't exist
 		boolean conceptModelObjectAttributePresent = snomedTaxonomy.getAllConceptIds().contains(Concepts.CONCEPT_MODEL_OBJECT_ATTRIBUTE_LONG);
@@ -152,7 +152,7 @@ public class OntologyService {
 				continue;
 			}
 			// Convert any stated relationships to axioms
-			boolean primitive = snomedTaxonomy.isPrimitive(conceptId);
+			boolean primitive = primitiveAxiom ? true : snomedTaxonomy.isPrimitive(conceptId);
 			Collection<Relationship> statedRelationships = snomedTaxonomy.getStatedRelationships(conceptId);
 
 			if (!statedRelationships.isEmpty() && !attributeIds.contains(conceptId)) {
@@ -169,7 +169,11 @@ public class OntologyService {
 						.add(conceptAxiom);
 			}
 		}
-		return axiomsMap;
+		return axiomsMap;		
+	}
+	
+	public Map<Long, Set<OWLAxiom>> createAxiomsFromStatedRelationships(SnomedTaxonomy snomedTaxonomy, Set<Long> conceptIds) {
+		return createAxiomsFromStatedRelationships(snomedTaxonomy, conceptIds, false);
 	}
 
 	public Map<Long, Set<OWLAxiom>> createAxiomsFromStatedRelationships(SnomedTaxonomy snomedTaxonomy) {
