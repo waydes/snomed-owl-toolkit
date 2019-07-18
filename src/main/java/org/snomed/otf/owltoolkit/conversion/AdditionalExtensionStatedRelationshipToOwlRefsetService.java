@@ -48,7 +48,7 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
  *  III. Case 4 requires the international stated view to create additional axiom.
  *  		Inputs: The International stated build used for complete OWL conversion + Extension Snapshot export
  *	
- * Outputs: Inactivated stated relationships and OWL axioms reference set
+ * Outputs: Inactive stated relationships and OWL axioms reference set
  * 
  * Note: Axioms must be primitive when created for I and II
  * How to run:
@@ -120,36 +120,15 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(bothConceptsReport))) {
 			writer.write(RF2Headers.RELATIONSHIP_HEADER);
 			for (Long conceptId : concepts) {
-				for (Relationship relationship : snomedTaxonomy.getStatedRelationships(conceptId)) {
-					writeOutRelationship(writer, relationship, conceptId);
+				for (Relationship rel : snomedTaxonomy.getStatedRelationships(conceptId)) {
+					writeStateRelationshipRow(writer, String.valueOf(rel.getRelationshipId()), 
+							"1", String.valueOf(rel.getModuleId()), String.valueOf(conceptId),
+							String.valueOf(rel.getDestinationId()), String.valueOf(rel.getGroup()), 
+							String.valueOf(rel.getTypeId()));
 				}
 			}
 		}
 	}
-	
-	private void writeOutRelationship(BufferedWriter writer, Relationship relationship, Long conceptId) throws IOException {
-		writer.append(String.valueOf(relationship.getRelationshipId()));
-		writer.append(TAB);
-		writer.append(String.valueOf(relationship.getEffectiveTime()));
-		writer.append(TAB);
-		writer.append("1");
-		writer.append(TAB);
-		writer.append(String.valueOf(relationship.getModuleId()));
-		writer.append(TAB);
-		writer.append(String.valueOf(conceptId));
-		writer.append(TAB);
-		writer.append(String.valueOf(relationship.getDestinationId()));
-		writer.append(TAB);
-		writer.append(String.valueOf(relationship.getTypeId()));
-		writer.append(TAB);
-		writer.append(String.valueOf(relationship.getGroup()));
-		writer.append(TAB);
-		writer.append(String.valueOf(relationship.getCharacteristicTypeId()));
-		writer.append(TAB);
-		writer.append("900000000000451002");
-		writer.newLine();
-	}
-
 	
 	private static class ExtensionOverridingInternationalProcessor extends ImpotentComponentFactory {
 		
