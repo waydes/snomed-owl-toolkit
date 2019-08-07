@@ -99,9 +99,10 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(rf2DeltaZipResults)) {
 			zipOutputStream.putNextEntry(new ZipEntry(SCT2_STATED_RELATIONSHIP_DELTA + effectiveDate + TXT));
 			ExtensionOverridingInternationalProcessor processor = new ExtensionOverridingInternationalProcessor(zipOutputStream);
-			SnomedTaxonomy snomedTaxonomy = readSnomedTaxonomy(snapshotInputStreamSet, null, processor, null);
+			SnomedTaxonomy snomedTaxonomy = readSnomedTaxonomy(snapshotInputStreamSet, new OptionalFileInputStream(null), processor, null);
 			processor.complete();
 			zipOutputStream.closeEntry();
+			zipOutputStream.putNextEntry(new ZipEntry(OWL_AXIOM_REFSET_DELTA + effectiveDate + TXT));
 			//uncomment code below to generate primitive axioms using International complete owl
 			Set<Long> conceptsToGenerate = processor.getConceptsToGenerateAxiomsWithoutIntModelling();
 //			Set<Long> conceptsToGenerate = processor.getConceptsToGenerateAxiomsNeedToAddIsA();
@@ -119,6 +120,7 @@ public class AdditionalExtensionStatedRelationshipToOwlRefsetService extends Sta
 		File bothConceptsReport = new File(filename);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(bothConceptsReport))) {
 			writer.write(RF2Headers.RELATIONSHIP_HEADER);
+			writer.newLine();
 			for (Long conceptId : concepts) {
 				for (Relationship rel : snomedTaxonomy.getStatedRelationships(conceptId)) {
 					writeStateRelationshipRow(writer, String.valueOf(rel.getRelationshipId()), 
